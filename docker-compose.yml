@@ -1,0 +1,59 @@
+services:
+  postgres:
+    image: postgres:13-alpine
+    container_name: ems-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: sif
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: employee_system_db
+    restart: unless-stopped
+    volumes:
+      - ems-postgres:/var/lib/postgresql/data
+    networks:
+      - ems-system
+
+
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    container_name: ems-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ems-rabbitmq:/var/lib/rabbitmq
+    networks:
+      - ems-system
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    volumes:
+      - cache:/data
+    networks:
+      - ems-system
+    command: ["redis-server"]
+
+  maildev:
+    image: maildev/maildev
+    container_name: ems-maildev
+    ports:
+      - "1025:1025"
+      - "1080:1080"
+    networks:
+      - ems-system
+
+
+
+networks:
+  ems-system:
+    driver: bridge
+volumes:
+  ems-rabbitmq:
+    driver: local
+  cache:
+    driver: local
+  ems-postgres:
+    driver: local
