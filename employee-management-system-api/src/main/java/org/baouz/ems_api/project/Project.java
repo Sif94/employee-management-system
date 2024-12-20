@@ -1,4 +1,4 @@
-package org.baouz.ems_api.employee;
+package org.baouz.ems_api.project;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,6 @@ import java.time.LocalDate;
 import java.util.Set;
 
 import static jakarta.persistence.GenerationType.UUID;
-import static jakarta.persistence.TemporalType.DATE;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,40 +22,29 @@ import static jakarta.persistence.TemporalType.DATE;
 @SuperBuilder
 @Entity
 @Table(
-        name = "employees",
+        name = "projects",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        name = "employees_unique_constraint_email",
-                        columnNames = {"email"}
-                ),
-                @UniqueConstraint(
-                        name = "employees_unique_constraint_phone",
-                        columnNames = {"phone"}
+                        name = "projects_unique_constraint_name",
+                        columnNames = {"name"}
                 )
         }
 )
-public class Employee extends BaseEntity {
-
+public class Project extends BaseEntity {
     @Id @GeneratedValue(strategy = UUID)
     private String id;
     @Column(nullable = false)
-    private String firstname;
+    private String name;
     @Column(nullable = false)
-    private String lastname;
+    private String description;
     @Column(nullable = false)
-    private String email;
-    private String phone;
-    @Temporal(DATE)
-    private LocalDate birthday;
-    @Temporal(DATE)
-    private LocalDate hireDate;
+    private LocalDate startDate;
     @Column(nullable = false)
-    private Double salary;
-    private String picture;
-    private Boolean isArchived;
+    private LocalDate endDate;
     @ManyToOne
+    @JoinColumn(name = "department_id")
     private Department department;
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "project")
     private Set<Assignment> assignments;
 
 }
