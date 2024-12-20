@@ -50,5 +50,6 @@ public class Employee extends BaseEntity {
     @Column(nullable = false)
     private Double salary;
     private String picture;
+    private Boolean isArchived;
 
 }

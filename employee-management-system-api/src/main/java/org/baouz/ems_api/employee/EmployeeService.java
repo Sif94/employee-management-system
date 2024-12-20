@@ -7,12 +7,16 @@ import org.baouz.ems_api.file.FileStorageService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import static java.lang.String.format;
+
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class EmployeeService {
     private final EmployeeRepository repository;
     private final EmployeeMapper mapper;
@@ -24,7 +28,7 @@ public class EmployeeService {
     }
 
     public PageResponse<EmployeeResponse> findAll(Integer page, Integer size) {
-        Page<Employee> employeePage = repository.findAll(PageRequest.of(page, size));
+        Page<Employee> employeePage = repository.findAllByIsArchived(false,PageRequest.of(page, size));
         List<EmployeeResponse> list = employeePage
                 .getContent()
                 .stream()
@@ -46,6 +50,32 @@ public class EmployeeService {
                 .orElseThrow(() -> new EntityNotFoundException("No employee found with ID:: " + employeeId));
         var profilePicture = fileStorageService.saveFile(file, employeeId);
         employee.setPicture(profilePicture);
+        repository.save(employee);
+    }
+
+    public EmployeeResponse findById(String employeeId) {
+        return repository.findById(employeeId)
+                .map(mapper::toEmployeeResponse)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("No employee found with ID:: " + employeeId)
+                );
+    }
+
+    public String updateEmployee(EmployeeRequest request) {
+        repository.findById(request.id())
+                .orElseThrow(
+                        () -> new EntityNotFoundException(format("Employee with ID %s was not found", request.id()))
+                );
+        var employee = mapper.toEmployee(request);
+        return repository.save(employee).getId();
+    }
+
+    public void archiveEmployee(String employeeId) {
+        Employee employee = repository.findById(employeeId)
+                .orElseThrow(
+                        () -> new EntityNotFoundException(format("Employee with ID %s was not found", employeeId))
+                );
+        employee.setIsArchived(true);
         repository.save(employee);
     }
 }

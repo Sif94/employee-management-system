@@ -42,4 +42,21 @@ public class EmployeeController {
     ){
         return ResponseEntity.ok(service.findAll(page,size));
     }
+
+    @GetMapping("/{employee-id}")
+    public ResponseEntity<EmployeeResponse> findEmployeeById(@PathVariable("employee-id") String employeeId) {
+        return ResponseEntity.ok(service.findById(employeeId));
+    }
+
+    @PutMapping
+    public ResponseEntity<String> updateEmployee(
+            @RequestBody @Valid EmployeeRequest request
+    ){
+        return ResponseEntity.ok(service.updateEmployee(request));
+    }
+    @DeleteMapping("{employee-id}")
+    public ResponseEntity<?> archiveEmployee(@PathVariable("employee-id") String employeeId) {
+        service.archiveEmployee(employeeId);
+        return ResponseEntity.noContent().build();
+    }
 }

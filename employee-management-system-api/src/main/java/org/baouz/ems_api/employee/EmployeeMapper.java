@@ -17,6 +17,7 @@ public class EmployeeMapper {
                 .birthday(request.birthday())
                 .hireDate(request.hireDate())
                 .salary(request.salary())
+                .isArchived(false)
                 .build();
     }
 
@@ -30,6 +31,7 @@ public class EmployeeMapper {
                 .birthday(employee.getBirthday())
                 .hireDate(employee.getHireDate())
                 .picture(FileUtils.readFileFromLocation(employee.getPicture()))
+                .salary(employee.getSalary())
                 .build();
     }
 }

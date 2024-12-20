@@ -17,5 +17,6 @@ public class EmployeeResponse {
     private String phone;
     private LocalDate birthday;
     private LocalDate hireDate;
+    private Double salary;
     private byte[] picture;
 }
