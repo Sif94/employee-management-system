@@ -1,5 +1,6 @@
 package org.baouz.ems_api.employee;
 
+import org.baouz.ems_api.file.FileUtils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,6 +29,7 @@ public class EmployeeMapper {
                 .phone(employee.getPhone())
                 .birthday(employee.getBirthday())
                 .hireDate(employee.getHireDate())
+                .picture(FileUtils.readFileFromLocation(employee.getPicture()))
                 .build();
     }
 }

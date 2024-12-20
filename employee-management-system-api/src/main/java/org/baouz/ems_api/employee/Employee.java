@@ -49,5 +49,6 @@ public class Employee extends BaseEntity {
     private LocalDate hireDate;
     @Column(nullable = false)
     private Double salary;
+    private String picture;
 
 }
