@@ -32,6 +32,7 @@ public class EmployeeMapper {
                 .hireDate(employee.getHireDate())
                 .picture(FileUtils.readFileFromLocation(employee.getPicture()))
                 .salary(employee.getSalary())
+                .departmentId(employee.getDepartment().getId())
                 .build();
     }
 }

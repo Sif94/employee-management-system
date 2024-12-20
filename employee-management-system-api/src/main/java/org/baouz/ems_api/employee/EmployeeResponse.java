@@ -19,4 +19,5 @@ public class EmployeeResponse {
     private LocalDate hireDate;
     private Double salary;
     private byte[] picture;
+    private String departmentId;
 }

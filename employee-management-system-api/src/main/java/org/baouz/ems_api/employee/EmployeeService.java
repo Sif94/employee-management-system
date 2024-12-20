@@ -3,6 +3,8 @@ package org.baouz.ems_api.employee;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.baouz.ems_api.common.PageResponse;
+import org.baouz.ems_api.department.Department;
+import org.baouz.ems_api.department.DepartmentRepository;
 import org.baouz.ems_api.file.FileStorageService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,11 +21,17 @@ import static java.lang.String.format;
 @Transactional
 public class EmployeeService {
     private final EmployeeRepository repository;
+    private final DepartmentRepository departmentRepository;
     private final EmployeeMapper mapper;
     private final FileStorageService fileStorageService;
 
     public String save(EmployeeRequest request) {
         var employee = mapper.toEmployee(request);
+        Department department = departmentRepository.findById(request.departmentId())
+                .orElseThrow(
+                        () -> new EntityNotFoundException(format("Department with ID:: %s not found", request.departmentId()))
+                );
+        employee.setDepartment(department);
         return repository.save(employee).getId();
     }
 
@@ -66,7 +74,12 @@ public class EmployeeService {
                 .orElseThrow(
                         () -> new EntityNotFoundException(format("Employee with ID %s was not found", request.id()))
                 );
+        Department department = departmentRepository.findById(request.departmentId())
+                .orElseThrow(
+                        () -> new EntityNotFoundException(format("Department with ID:: %s not found", request.departmentId()))
+                );
         var employee = mapper.toEmployee(request);
+        employee.setDepartment(department);
         return repository.save(employee).getId();
     }
 

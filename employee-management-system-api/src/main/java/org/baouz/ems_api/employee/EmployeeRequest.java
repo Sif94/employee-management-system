@@ -26,6 +26,7 @@ public record EmployeeRequest(
         @NotNull(message = "Employee hireDate is mandatory")
         LocalDate hireDate,
         @NotNull(message = "Employee salary is mandatory")
-        Double salary
+        Double salary,
+        String departmentId
 ) {
 }
