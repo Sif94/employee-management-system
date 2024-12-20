@@ -46,7 +46,18 @@ services:
     networks:
       - ems-system
 
-
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.7
+    container_name: ems-keycloak
+    ports:
+      - "9090:8080"
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    networks:
+      - ems-system
+    command:
+      - "start-dev"
 
 networks:
   ems-system:
