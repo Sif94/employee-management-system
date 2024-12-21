@@ -60,4 +60,7 @@ public class Employee extends BaseEntity {
     @OneToMany(mappedBy = "employee")
     private Set<Assignment> assignments;
 
+    public String getFullName(){
+        return firstname + " " + lastname;
+    }
 }
