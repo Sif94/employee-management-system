@@ -13,4 +13,15 @@ public class AssignmentMapper {
                 .endDate(request.endDate())
                 .build();
     }
+
+    public AssignmentResponse toAssignmentResponse(Assignment assignment) {
+        return AssignmentResponse.builder()
+                .id(assignment.getId())
+                .role(assignment.getRole())
+                .startDate(assignment.getStartDate())
+                .endDate(assignment.getEndDate())
+                .employeeId(assignment.getEmployee().getId())
+                .projectId(assignment.getProject().getId())
+                .build();
+    }
 }
