@@ -2,10 +2,14 @@ package org.baouz.ems_api.employee;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.baouz.ems_api.common.PageResponse;
 import org.baouz.ems_api.department.Department;
 import org.baouz.ems_api.department.DepartmentRepository;
 import org.baouz.ems_api.file.FileStorageService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -19,12 +23,16 @@ import static java.lang.String.format;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class EmployeeService {
     private final EmployeeRepository repository;
     private final DepartmentRepository departmentRepository;
     private final EmployeeMapper mapper;
     private final FileStorageService fileStorageService;
 
+
+
+    @CacheEvict(value = "employees", allEntries = true)
     public String save(EmployeeRequest request) {
         var employee = mapper.toEmployee(request);
         Department department = departmentRepository.findById(request.departmentId())
@@ -34,8 +42,9 @@ public class EmployeeService {
         employee.setDepartment(department);
         return repository.save(employee).getId();
     }
-
+    @Cacheable(value = "employees")
     public PageResponse<EmployeeResponse> findAll(Integer page, Integer size) {
+        log.info("Find all employees from DB");
         Page<Employee> employeePage = repository.findAllByIsArchivedIsFalse(PageRequest.of(page, size));
         List<EmployeeResponse> list = employeePage
                 .getContent()
@@ -53,6 +62,7 @@ public class EmployeeService {
                 .build();
     }
 
+    @CachePut(value = "employees", key = "#employeeId")
     public void uploadProfilePicture(MultipartFile file, String employeeId) {
         Employee employee = repository.findById(employeeId)
                 .orElseThrow(() -> new EntityNotFoundException("No employee found with ID:: " + employeeId));
@@ -61,6 +71,7 @@ public class EmployeeService {
         repository.save(employee);
     }
 
+    @Cacheable(value = "employees", key = "#employeeId")
     public EmployeeResponse findById(String employeeId) {
         return repository.findById(employeeId)
                 .map(mapper::toEmployeeResponse)
@@ -68,7 +79,7 @@ public class EmployeeService {
                         () -> new EntityNotFoundException("No employee found with ID:: " + employeeId)
                 );
     }
-
+    @CachePut(value = "employees", key = "#request.id")
     public String updateEmployee(EmployeeRequest request) {
         repository.findById(request.id())
                 .orElseThrow(
@@ -83,6 +94,7 @@ public class EmployeeService {
         return repository.save(employee).getId();
     }
 
+    @CacheEvict(value = "employees", key = "#employeeId", beforeInvocation = true)
     public void archiveEmployee(String employeeId) {
         Employee employee = repository.findById(employeeId)
                 .orElseThrow(
@@ -92,6 +104,7 @@ public class EmployeeService {
         repository.save(employee);
     }
 
+    @Cacheable(value = "employees", key = "#departmentId")
     public PageResponse<EmployeeResponse> findEmployeesByDepartmentId(Integer page, Integer size, String departmentId) {
         Page<Employee> employeePage = repository.findAllByDepartmentId(departmentId, PageRequest.of(page, size));
         var employees = employeePage.getContent()

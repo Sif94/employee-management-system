@@ -2,6 +2,7 @@ package org.baouz.ems_api.employee;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @NoArgsConstructor
@@ -9,7 +10,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-public class EmployeeResponse {
+public class EmployeeResponse implements Serializable {
     private String id;
     private String firstname;
     private String lastname;

@@ -2,6 +2,7 @@ package org.baouz.ems_api.common;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @NoArgsConstructor
@@ -9,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class PageResponse<T> {
+public class PageResponse<T> implements Serializable {
     private Integer page;
     private Integer size;
     private Integer totalPages;

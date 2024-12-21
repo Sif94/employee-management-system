@@ -12,6 +12,7 @@ import org.baouz.ems_api.employee.Employee;
 import org.baouz.ems_api.employee.EmployeeRepository;
 import org.baouz.ems_api.project.Project;
 import org.baouz.ems_api.project.ProjectRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
@@ -32,6 +33,7 @@ public class AssignmentService {
     private final EmailService emailService;
     private final AssignmentMapper mapper;
 
+
     public String save(AssignmentRequest request, Authentication connectedUser) throws MessagingException {
         var assignment = mapper.toAssignment(request);
         Employee employee = employeeRepository.findById(request.employeeId())
@@ -49,6 +51,7 @@ public class AssignmentService {
         senEmail(savedAssignment, "Project Assignment");
         return savedAssignment.getId();
     }
+
 
     public PageResponse<AssignmentResponse> findAllAssignmentsByProjectId(int page, int size, String projectId) {
         var pageable = PageRequest.of(page, size);

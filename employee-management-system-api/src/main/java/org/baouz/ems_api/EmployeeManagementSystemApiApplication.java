@@ -11,6 +11,7 @@ import org.baouz.ems_api.project.ProjectRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -23,6 +24,7 @@ import static org.baouz.ems_api.project.Status.PENDING;
 @SpringBootApplication
 @EnableJpaAuditing
 @EnableAsync
+@EnableCaching
 public class EmployeeManagementSystemApiApplication {
 
 	public static void main(String[] args) {
@@ -66,6 +68,7 @@ public class EmployeeManagementSystemApiApplication {
 							.endDate(LocalDate.now())
 							.tags(Set.of("Java", "Web"))
 							.createdBy("John Doe")
+							.department(department)
 							.build()
 			);
 			assignmentRepository.save(
