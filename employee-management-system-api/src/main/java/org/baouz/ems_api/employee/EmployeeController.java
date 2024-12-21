@@ -59,4 +59,13 @@ public class EmployeeController {
         service.archiveEmployee(employeeId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/department/{department-id}")
+    public ResponseEntity<PageResponse<EmployeeResponse>> findEmployeeByDepartmentId(
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "size", defaultValue = "10") Integer size,
+            @PathVariable("department-id") String departmentId
+    ){
+        return ResponseEntity.ok(service.findEmployeesByDepartmentId(page,size,departmentId));
+    }
 }

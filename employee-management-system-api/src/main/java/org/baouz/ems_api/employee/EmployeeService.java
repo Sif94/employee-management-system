@@ -91,4 +91,21 @@ public class EmployeeService {
         employee.setArchived(true);
         repository.save(employee);
     }
+
+    public PageResponse<EmployeeResponse> findEmployeesByDepartmentId(Integer page, Integer size, String departmentId) {
+        Page<Employee> employeePage = repository.findAllByDepartmentId(departmentId, PageRequest.of(page, size));
+        var employees = employeePage.getContent()
+                .stream()
+                .map(mapper::toEmployeeResponse)
+                .toList();
+        return PageResponse.<EmployeeResponse>builder()
+                .page(employeePage.getNumber())
+                .size(employeePage.getSize())
+                .totalElements(employeePage.getTotalElements())
+                .totalPages(employeePage.getTotalPages())
+                .content(employees)
+                .isFirst(employeePage.isFirst())
+                .isLast(employeePage.isLast())
+                .build();
+    }
 }

@@ -10,5 +10,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
     Page<Employee> findAllByIsArchivedIsFalse(Pageable pageable);
     Optional<Employee> findByEmail(String email);
     Optional<Employee> findByPhone(String phone);
+    Page<Employee> findAllByDepartmentId(String departmentId, Pageable pageable);
 
 }
