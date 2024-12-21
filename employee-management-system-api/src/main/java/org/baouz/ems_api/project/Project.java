@@ -13,6 +13,7 @@ import org.baouz.ems_api.department.Department;
 import java.time.LocalDate;
 import java.util.Set;
 
+import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.UUID;
 
 @NoArgsConstructor
@@ -41,10 +42,17 @@ public class Project extends BaseEntity {
     private LocalDate startDate;
     @Column(nullable = false)
     private LocalDate endDate;
+
+    @Enumerated(STRING)
+    private Status status;
+    @ElementCollection
+    private Set<String> tags;
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
     @OneToMany(mappedBy = "project")
     private Set<Assignment> assignments;
+    @Column(columnDefinition = "boolean default false")
+    private boolean isArchived = false;
 
 }

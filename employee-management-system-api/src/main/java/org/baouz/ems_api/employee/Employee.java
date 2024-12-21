@@ -53,7 +53,8 @@ public class Employee extends BaseEntity {
     @Column(nullable = false)
     private Double salary;
     private String picture;
-    private Boolean isArchived;
+    @Column(columnDefinition = "boolean default false")
+    private boolean isArchived = false;
     @ManyToOne
     private Department department;
     @OneToMany(mappedBy = "employee")

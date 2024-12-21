@@ -36,7 +36,7 @@ public class EmployeeService {
     }
 
     public PageResponse<EmployeeResponse> findAll(Integer page, Integer size) {
-        Page<Employee> employeePage = repository.findAllByIsArchived(false,PageRequest.of(page, size));
+        Page<Employee> employeePage = repository.findAllByIsArchivedIsFalse(PageRequest.of(page, size));
         List<EmployeeResponse> list = employeePage
                 .getContent()
                 .stream()
@@ -88,7 +88,7 @@ public class EmployeeService {
                 .orElseThrow(
                         () -> new EntityNotFoundException(format("Employee with ID %s was not found", employeeId))
                 );
-        employee.setIsArchived(true);
+        employee.setArchived(true);
         repository.save(employee);
     }
 }
