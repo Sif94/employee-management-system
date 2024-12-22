@@ -22,7 +22,7 @@ public class EmailService {
     private final JavaMailSender mailSender;
     private final SpringTemplateEngine templateEngine;
 
-    @Async
+    //@Async
     public void sendEmail(
             EmailDTO emailDTO
     ) throws MessagingException {

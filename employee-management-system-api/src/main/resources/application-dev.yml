@@ -55,3 +55,12 @@ application:
   file:
     uploads:
       photos-output-path: ./uploads
+
+rabbitmq:
+  routing:
+    key: email-routing-key
+  exchange:
+    name: email-exchange
+  queue:
+    json:
+      name: email-queue

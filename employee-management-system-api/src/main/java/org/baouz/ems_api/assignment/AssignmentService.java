@@ -12,6 +12,7 @@ import org.baouz.ems_api.employee.Employee;
 import org.baouz.ems_api.employee.EmployeeRepository;
 import org.baouz.ems_api.project.Project;
 import org.baouz.ems_api.project.ProjectRepository;
+import org.baouz.ems_api.publisher.RabbitMQJsonProducer;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,7 +31,7 @@ public class AssignmentService {
     private final AssignmentRepository repository;
     private final EmployeeRepository employeeRepository;
     private final ProjectRepository projectRepository;
-    private final EmailService emailService;
+    private final RabbitMQJsonProducer producer;
     private final AssignmentMapper mapper;
 
 
@@ -96,6 +97,7 @@ public class AssignmentService {
 
         Assignment savedAssignment = repository.save(assignment);
         senEmail(savedAssignment, "Update Project Assignment");
+
         return savedAssignment.getId();
 
     }
@@ -115,7 +117,7 @@ public class AssignmentService {
                 .subject(subject)
                 .properties(properties)
                 .build();
-        emailService.sendEmail(emailDTO);
+        producer.sendJsonMessage(emailDTO);
     }
 
     public void deleteAssignmentById(String assignmentId) {

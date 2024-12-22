@@ -8,6 +8,7 @@ import org.baouz.ems_api.employee.Employee;
 import org.baouz.ems_api.employee.EmployeeRepository;
 import org.baouz.ems_api.project.Project;
 import org.baouz.ems_api.project.ProjectRepository;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,8 +24,9 @@ import static org.baouz.ems_api.project.Status.PENDING;
 
 @SpringBootApplication
 @EnableJpaAuditing
-@EnableAsync
+//@EnableAsync
 @EnableCaching
+@EnableRabbit
 public class EmployeeManagementSystemApiApplication {
 
 	public static void main(String[] args) {
