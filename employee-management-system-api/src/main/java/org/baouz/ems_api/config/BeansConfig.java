@@ -7,7 +7,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.http.HttpHeaders.*;
@@ -29,7 +28,7 @@ public class BeansConfig {
                 "POST",
                 "PUT",
                 "DELETE"));
-        config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+        config.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:3000"));
         config.setAllowedHeaders(
                 List.of(ORIGIN,
                         ACCEPT,
