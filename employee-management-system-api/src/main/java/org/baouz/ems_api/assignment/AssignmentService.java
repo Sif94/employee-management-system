@@ -35,6 +35,7 @@ public class AssignmentService {
     private final AssignmentMapper mapper;
 
 
+
     public String save(AssignmentRequest request, Authentication connectedUser) throws MessagingException {
         var assignment = mapper.toAssignment(request);
         Employee employee = employeeRepository.findById(request.employeeId())

@@ -41,8 +41,6 @@ spring:
       timeout:
   cache:
     type: redis
-    redis:
-      time-to-live: 60
   security:
     oauth2:
       resourceserver:
