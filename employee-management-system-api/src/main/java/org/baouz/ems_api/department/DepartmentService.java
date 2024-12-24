@@ -6,10 +6,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,12 +27,13 @@ public class DepartmentService {
         return repository.save(department).getId();
     }
 
-    @Cacheable(value = "departments")
+    @Cacheable(value = "departments", key = "'allDepartments'")
     public List<DepartmentResponse> findAll() {
-        return repository.findAll()
+        List<DepartmentResponse> departmentResponses = repository.findAll()
                 .stream()
                 .map(mapper::toDepartmentResponse)
-                .toList();
+                .collect(Collectors.toList());
+        return departmentResponses;
     }
 
     @Cacheable(value = "departments", key = "#departmentId")

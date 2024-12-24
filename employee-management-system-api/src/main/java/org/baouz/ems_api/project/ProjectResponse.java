@@ -2,8 +2,9 @@ package org.baouz.ems_api.project;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,5 +19,5 @@ public class ProjectResponse {
     private String departmentId;
     private LocalDate startDate;
     private LocalDate endDate;
-    private Set<String> tags;
+    private List<String> tags;
 }

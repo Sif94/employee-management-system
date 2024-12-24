@@ -14,6 +14,8 @@ import org.baouz.ems_api.project.Project;
 import org.baouz.ems_api.project.ProjectRepository;
 import org.baouz.ems_api.publisher.RabbitMQJsonProducer;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
@@ -36,6 +38,7 @@ public class AssignmentService {
 
 
 
+    @CacheEvict(value = "assignments", allEntries = true)
     public String save(AssignmentRequest request, Authentication connectedUser) throws MessagingException {
         var assignment = mapper.toAssignment(request);
         Employee employee = employeeRepository.findById(request.employeeId())
@@ -55,6 +58,7 @@ public class AssignmentService {
     }
 
 
+    @Cacheable(value = "assignments", key = "#page + '-' + #size + '-' + #projectId")
     public PageResponse<AssignmentResponse> findAllAssignmentsByProjectId(int page, int size, String projectId) {
         var pageable = PageRequest.of(page, size);
         Page<Assignment> assignmentPage = repository.findAllByProjectId(projectId, pageable);
@@ -73,6 +77,7 @@ public class AssignmentService {
                 .build();
     }
 
+    @Cacheable(value = "assignments", key = "#assignmentId")
     public AssignmentResponse findAssignmentById(String assignmentId) {
         return repository.findById(assignmentId)
                 .map(mapper::toAssignmentResponse)
@@ -81,6 +86,7 @@ public class AssignmentService {
                 );
     }
 
+    @CachePut(value = "assignments", key = "#request.id")
     public String updateAssignment(AssignmentRequest request) throws MessagingException {
         Employee employee = employeeRepository.findById(request.employeeId())
                 .orElseThrow(
@@ -121,6 +127,7 @@ public class AssignmentService {
         producer.sendJsonMessage(emailDTO);
     }
 
+    @CacheEvict(value = "assignments", key = "#assignmentId")
     public void deleteAssignmentById(String assignmentId) {
         repository.deleteById(assignmentId);
     }

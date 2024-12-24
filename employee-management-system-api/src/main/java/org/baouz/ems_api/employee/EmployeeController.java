@@ -20,7 +20,7 @@ public class EmployeeController {
 
     private final EmployeeService service;
     @PostMapping
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'HR')")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN', 'ADMIN', 'HR')")
     public ResponseEntity<String> saveEmployee(
             @RequestBody @Valid EmployeeRequest request
     ) {
@@ -29,7 +29,7 @@ public class EmployeeController {
                 .body(service.save(request));
     }
     @PostMapping(value = "/picture/{employee-id}", consumes = "multipart/form-data")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'HR')")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN', 'ADMIN', 'HR')")
     public ResponseEntity<?> uploadProfilePicture(
             @PathVariable("employee-id") String employeeId,
             @Parameter()
@@ -39,7 +39,7 @@ public class EmployeeController {
         return ResponseEntity.accepted().build();
     }
     @GetMapping
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN', 'HR')")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN', 'HR')")
     public ResponseEntity<PageResponse<EmployeeResponse>> findAllEmployees(
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "size", defaultValue = "10") Integer size
@@ -48,27 +48,27 @@ public class EmployeeController {
     }
 
     @GetMapping("/{employee-id}")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'HR')")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN', 'ADMIN', 'HR')")
     public ResponseEntity<EmployeeResponse> findEmployeeById(@PathVariable("employee-id") String employeeId) {
         return ResponseEntity.ok(service.findById(employeeId));
     }
 
     @PutMapping
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'HR')")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN', 'ADMIN', 'HR')")
     public ResponseEntity<String> updateEmployee(
             @RequestBody @Valid EmployeeRequest request
     ){
         return ResponseEntity.ok(service.updateEmployee(request));
     }
     @DeleteMapping("{employee-id}")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN', 'ADMIN')")
     public ResponseEntity<?> archiveEmployee(@PathVariable("employee-id") String employeeId) {
         service.archiveEmployee(employeeId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/department/{department-id}")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'HR')")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN', 'ADMIN', 'HR')")
     public ResponseEntity<PageResponse<EmployeeResponse>> findEmployeeByDepartmentId(
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "size", defaultValue = "10") Integer size,

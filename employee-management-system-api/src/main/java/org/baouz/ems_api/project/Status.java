@@ -1,6 +1,8 @@
 package org.baouz.ems_api.project;
 
-public enum Status {
+import java.io.Serializable;
+
+public enum Status implements Serializable {
     PENDING,
     FINISHED,
     CANCELLED,

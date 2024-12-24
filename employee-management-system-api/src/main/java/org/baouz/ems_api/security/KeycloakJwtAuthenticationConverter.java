@@ -1,4 +1,4 @@
-package org.baouz.ems_api.security;
+/*package org.baouz.ems_api.security;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -36,3 +36,4 @@ public class KeycloakJwtAuthenticationConverter implements Converter<Jwt, Abstra
                 .toList();
     }
 }
+*/

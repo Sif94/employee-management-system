@@ -10,10 +10,13 @@ import org.baouz.ems_api.assignment.Assignment;
 import org.baouz.ems_api.common.BaseEntity;
 import org.baouz.ems_api.department.Department;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.GenerationType.UUID;
 
 @NoArgsConstructor
@@ -45,8 +48,8 @@ public class Project extends BaseEntity {
 
     @Enumerated(STRING)
     private Status status;
-    @ElementCollection
-    private Set<String> tags;
+    @ElementCollection(fetch = EAGER)
+    private List<String> tags;
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;

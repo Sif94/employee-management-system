@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 public record ProjectRequest(
@@ -23,7 +24,7 @@ public record ProjectRequest(
         LocalDate startDate,
         @NotNull(message = "Project end date is mandatory")
         LocalDate endDate,
-        Set<String> tags,
+        List<String> tags,
         @NotNull(message = "Project department is mandatory")
         @NotEmpty(message = "Project department is mandatory")
         @NotBlank(message = "Project department is mandatory")

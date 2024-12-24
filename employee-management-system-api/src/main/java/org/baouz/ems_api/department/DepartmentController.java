@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,12 +31,12 @@ public class DepartmentController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'HR', 'MANAGER')")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN', 'ADMIN', 'HR', 'MANAGER')")
     public ResponseEntity<List<DepartmentResponse>> findAllDepartments() {
         return ResponseEntity.ok(service.findAll());
     }
     @GetMapping("{department-id}")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'HR', 'MANAGER')")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN', 'ADMIN', 'HR', 'MANAGER')")
     public ResponseEntity<DepartmentResponse> findDepartmentById(
         @PathVariable("department-id") String departmentId
     ){
@@ -43,7 +44,7 @@ public class DepartmentController {
     }
 
     @PutMapping
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN')")
     public ResponseEntity<String> updateDepartment(
             @RequestBody @Valid DepartmentRequest request
     ){
@@ -51,7 +52,7 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/{department-id}")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN')")
     public ResponseEntity<?> deleteDepartmentById(@PathVariable("department-id") String departmentId){
         service.deleteDepartmentById(departmentId);
         return ResponseEntity.noContent().build();

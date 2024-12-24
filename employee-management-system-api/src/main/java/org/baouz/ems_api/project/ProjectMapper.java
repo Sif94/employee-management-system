@@ -26,8 +26,8 @@ public class ProjectMapper {
                 .status(project.getStatus())
                 .startDate(project.getStartDate())
                 .endDate(project.getEndDate())
-                .tags(project.getTags())
                 .departmentId(project.getDepartment().getId())
+                .tags(project.getTags())
                 .build();
     }
 }

@@ -2,6 +2,7 @@ package org.baouz.ems_api.project;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.baouz.ems_api.common.PageResponse;
 import org.baouz.ems_api.department.Department;
 import org.baouz.ems_api.department.DepartmentRepository;
@@ -19,6 +20,7 @@ import static java.lang.String.format;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @Transactional
 public class ProjectService {
 
@@ -26,7 +28,7 @@ public class ProjectService {
     private final DepartmentRepository departmentRepository;
     private final ProjectMapper mapper;
 
-    @CacheEvict(value = "projects", allEntries = true)
+    @CacheEvict(value = "project", allEntries = true)
     public String save(ProjectRequest request) {
         var project = mapper.toProject(request);
         Department department = departmentRepository.findById(request.departmentId())
@@ -37,14 +39,16 @@ public class ProjectService {
         return repository.save(project).getId();
     }
 
-    @Cacheable(value = "projects")
+    @Cacheable(value = "project", key = "#page + '-' + #size")
     public PageResponse<ProjectResponse> findAll(Integer page, Integer size) {
+        log.info("Finding all projects from DB");
         var pageRequest = PageRequest.of(page, size);
         Page<Project> projectPage = repository.findAllByIsArchivedIsFalse(pageRequest);
         List<ProjectResponse> projectResponses = projectPage.getContent()
                 .stream()
                 .map(mapper::toProjectResponse)
                 .toList();
+        System.out.println(projectResponses.toString());
         return PageResponse.<ProjectResponse>builder()
                 .page(projectPage.getNumber())
                 .size(projectPage.getSize())
@@ -56,7 +60,7 @@ public class ProjectService {
                 .build();
     }
 
-    @Cacheable(value = "projects", key = "#projectId")
+    @Cacheable(value = "project", key = "#projectId")
     public ProjectResponse findById(String projectId) {
         return repository.findById(projectId)
                 .map(mapper::toProjectResponse)
@@ -65,7 +69,7 @@ public class ProjectService {
                 );
     }
 
-    @CachePut(value = "projects", key = "#request.id")
+    @CachePut(value = "project", key = "#request.id")
     public String updateProject(ProjectRequest request) {
         repository.findById(request.id())
                 .orElseThrow(
@@ -80,7 +84,7 @@ public class ProjectService {
         return repository.save(newProject).getId();
     }
 
-    @CacheEvict(value = "projects", key = "#projectId", beforeInvocation = true)
+    @CacheEvict(value = "project", key = "#projectId", beforeInvocation = true)
     public void archiveProject(String projectId) {
         Project project = repository.findById(projectId)
                 .orElseThrow(

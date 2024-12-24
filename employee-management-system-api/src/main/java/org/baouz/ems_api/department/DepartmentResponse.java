@@ -2,6 +2,8 @@ package org.baouz.ems_api.department;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

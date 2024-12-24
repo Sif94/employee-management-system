@@ -8,6 +8,9 @@ import org.baouz.ems_api.employee.Employee;
 import org.baouz.ems_api.employee.EmployeeRepository;
 import org.baouz.ems_api.project.Project;
 import org.baouz.ems_api.project.ProjectRepository;
+import org.baouz.ems_api.role.Role;
+import org.baouz.ems_api.role.RoleName;
+import org.baouz.ems_api.role.RoleRepository;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,8 +19,10 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import static org.baouz.ems_api.project.Status.PENDING;
@@ -38,9 +43,18 @@ public class EmployeeManagementSystemApiApplication {
 			DepartmentRepository departmentRepository,
 			EmployeeRepository employeeRepository,
 			ProjectRepository projectRepository,
-			AssignmentRepository assignmentRepository
+			AssignmentRepository assignmentRepository,
+			RoleRepository roleRepository,
+			PasswordEncoder passwordEncoder
 	) {
 		return args -> {
+			Role admin = roleRepository.save(
+					Role.builder()
+							.name(RoleName.ADMIN)
+							.description("Admin")
+							.createdBy("John")
+							.build()
+			);
 			Department department = departmentRepository.save(
 					Department.builder()
 							.name("Department 1")
@@ -59,6 +73,8 @@ public class EmployeeManagementSystemApiApplication {
 							.createdBy("John Doe")
 							.department(department)
 							.salary(24000.99)
+							.role(admin)
+							.password(passwordEncoder.encode("password"))
 							.build()
 			);
 			Project project = projectRepository.save(
@@ -68,7 +84,7 @@ public class EmployeeManagementSystemApiApplication {
 							.status(PENDING)
 							.startDate(LocalDate.now())
 							.endDate(LocalDate.now())
-							.tags(Set.of("Java", "Web"))
+							.tags(List.of("Java", "Web"))
 							.createdBy("John Doe")
 							.department(department)
 							.build()

@@ -42,7 +42,7 @@ public class EmployeeService {
         employee.setDepartment(department);
         return repository.save(employee).getId();
     }
-    @Cacheable(value = "employees")
+    @Cacheable(value = "employees", key = "#page + '-' + #size")
     public PageResponse<EmployeeResponse> findAll(Integer page, Integer size) {
         log.info("Find all employees from DB");
         Page<Employee> employeePage = repository.findAllByIsArchivedIsFalse(PageRequest.of(page, size));

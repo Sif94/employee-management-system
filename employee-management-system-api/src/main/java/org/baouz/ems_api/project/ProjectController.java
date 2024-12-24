@@ -19,7 +19,7 @@ public class ProjectController {
     private final ProjectService service;
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'MANAGER')")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN', 'ADMIN', 'MANAGER')")
     public ResponseEntity<String> saveProject(
             @RequestBody @Valid ProjectRequest request
     ){
@@ -29,7 +29,7 @@ public class ProjectController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'MANAGER')")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN', 'ADMIN', 'MANAGER')")
     public ResponseEntity<PageResponse<ProjectResponse>> findAllProjects(
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "size", defaultValue = "10") Integer size
@@ -37,7 +37,7 @@ public class ProjectController {
         return ResponseEntity.ok(service.findAll(page,size));
     }
     @GetMapping("/{project-id}")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'MANAGER')")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN', 'ADMIN', 'MANAGER')")
     public ResponseEntity<ProjectResponse> findProjectById(
             @PathVariable("project-id") String projectId
     ){
@@ -45,7 +45,7 @@ public class ProjectController {
     }
 
     @PutMapping
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'MANAGER')")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN', 'ADMIN', 'MANAGER')")
     public ResponseEntity<String> updateProject(
             @RequestBody @Valid ProjectRequest request
     ){
@@ -53,7 +53,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{project-id}")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN', 'ADMIN')")
     public ResponseEntity<?> archiveProject(
             @PathVariable("project-id") String projectId
     ){
