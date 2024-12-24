@@ -28,7 +28,7 @@ public class ProjectService {
     private final DepartmentRepository departmentRepository;
     private final ProjectMapper mapper;
 
-    @CacheEvict(value = "project", allEntries = true)
+    @CacheEvict(value = "projects", allEntries = true)
     public String save(ProjectRequest request) {
         var project = mapper.toProject(request);
         Department department = departmentRepository.findById(request.departmentId())
@@ -39,7 +39,7 @@ public class ProjectService {
         return repository.save(project).getId();
     }
 
-    @Cacheable(value = "project", key = "#page + '-' + #size")
+    @Cacheable(value = "projects", key = "#page + '-' + #size")
     public PageResponse<ProjectResponse> findAll(Integer page, Integer size) {
         log.info("Finding all projects from DB");
         var pageRequest = PageRequest.of(page, size);
@@ -60,7 +60,7 @@ public class ProjectService {
                 .build();
     }
 
-    @Cacheable(value = "project", key = "#projectId")
+    @Cacheable(value = "projects", key = "#projectId")
     public ProjectResponse findById(String projectId) {
         return repository.findById(projectId)
                 .map(mapper::toProjectResponse)
@@ -69,7 +69,7 @@ public class ProjectService {
                 );
     }
 
-    @CacheEvict(value = "project", allEntries = true)
+    @CacheEvict(value = "projects", allEntries = true)
     public String updateProject(ProjectRequest request) {
         repository.findById(request.id())
                 .orElseThrow(
@@ -84,7 +84,7 @@ public class ProjectService {
         return repository.save(newProject).getId();
     }
 
-    @CacheEvict(value = "project", allEntries = true)
+    @CacheEvict(value = "projects", allEntries = true)
     public void archiveProject(String projectId) {
         Project project = repository.findById(projectId)
                 .orElseThrow(
