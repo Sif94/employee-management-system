@@ -62,7 +62,7 @@ public class EmployeeService {
                 .build();
     }
 
-    @CachePut(value = "employees", key = "#employeeId")
+    @CacheEvict(value = "employees", allEntries = true)
     public void uploadProfilePicture(MultipartFile file, String employeeId) {
         Employee employee = repository.findById(employeeId)
                 .orElseThrow(() -> new EntityNotFoundException("No employee found with ID:: " + employeeId));
@@ -79,7 +79,7 @@ public class EmployeeService {
                         () -> new EntityNotFoundException("No employee found with ID:: " + employeeId)
                 );
     }
-    @CachePut(value = "employees", key = "#request.id")
+    @CacheEvict(value = "employees", allEntries = true)
     public String updateEmployee(EmployeeRequest request) {
         repository.findById(request.id())
                 .orElseThrow(
@@ -94,7 +94,7 @@ public class EmployeeService {
         return repository.save(employee).getId();
     }
 
-    @CacheEvict(value = "employees", key = "#employeeId", beforeInvocation = true)
+    @CacheEvict(value = "employees", allEntries = true)
     public void archiveEmployee(String employeeId) {
         Employee employee = repository.findById(employeeId)
                 .orElseThrow(

@@ -69,7 +69,7 @@ public class ProjectService {
                 );
     }
 
-    @CachePut(value = "project", key = "#request.id")
+    @CacheEvict(value = "project", allEntries = true)
     public String updateProject(ProjectRequest request) {
         repository.findById(request.id())
                 .orElseThrow(
@@ -84,7 +84,7 @@ public class ProjectService {
         return repository.save(newProject).getId();
     }
 
-    @CacheEvict(value = "project", key = "#projectId", beforeInvocation = true)
+    @CacheEvict(value = "project", allEntries = true)
     public void archiveProject(String projectId) {
         Project project = repository.findById(projectId)
                 .orElseThrow(

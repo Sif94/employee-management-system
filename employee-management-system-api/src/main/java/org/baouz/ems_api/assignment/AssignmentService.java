@@ -86,7 +86,7 @@ public class AssignmentService {
                 );
     }
 
-    @CachePut(value = "assignments", key = "#request.id")
+    @CacheEvict(value = "assignments", allEntries = true)
     public String updateAssignment(AssignmentRequest request) throws MessagingException {
         Employee employee = employeeRepository.findById(request.employeeId())
                 .orElseThrow(
@@ -127,7 +127,7 @@ public class AssignmentService {
         producer.sendJsonMessage(emailDTO);
     }
 
-    @CacheEvict(value = "assignments", key = "#assignmentId")
+    @CacheEvict(value = "assignments", allEntries = true)
     public void deleteAssignmentById(String assignmentId) {
         repository.deleteById(assignmentId);
     }

@@ -45,7 +45,7 @@ public class DepartmentService {
                 );
     }
 
-    @CachePut(value = "departments", key = "#request.id")
+    @CacheEvict(value = "departments", allEntries = true)
     public String updateDepartment(DepartmentRequest request) {
         repository.findById(request.id())
                 .orElseThrow(
@@ -55,7 +55,7 @@ public class DepartmentService {
         return repository.save(department).getId();
     }
 
-    @CacheEvict(value = "departments", key = "#departmentId", beforeInvocation = true)
+    @CacheEvict(value = "departments", allEntries = true)
     public void deleteDepartmentById(String departmentId) {
         repository.findById(departmentId)
                 .orElseThrow(
