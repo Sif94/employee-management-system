@@ -55,6 +55,34 @@ public class EmployeeManagementSystemApiApplication {
 							.createdBy("John")
 							.build()
 			);
+			roleRepository.save(
+					Role.builder()
+							.name(RoleName.MANAGER)
+							.description("Manager")
+							.createdBy("John")
+							.build()
+			);
+			roleRepository.save(
+					Role.builder()
+							.name(RoleName.EMPLOYEE)
+							.description("Employee")
+							.createdBy("John")
+							.build()
+			);
+			roleRepository.save(
+					Role.builder()
+							.name(RoleName.HR)
+							.description("HR")
+							.createdBy("John")
+							.build()
+			);
+			roleRepository.save(
+					Role.builder()
+							.name(RoleName.SUPER_ADMIN)
+							.description("Super Admin")
+							.createdBy("John")
+							.build()
+			);
 			Department department = departmentRepository.save(
 					Department.builder()
 							.name("Department 1")
